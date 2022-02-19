@@ -1,0 +1,8 @@
+{
+  "name": "Future Africa Conference API",
+  "version": "1.0.0",
+  "description": "API for Future Africa Conference",
+  "title": "Future Africa Conference",
+  "url": "http://127.0.0.1:9001/v1",
+  "sampleUrl": "http://127.0.0.1:9001/v1"
+}
