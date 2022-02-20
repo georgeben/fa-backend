@@ -23,6 +23,13 @@ router
   .all(methodNotAllowedHandler);
 
 router
+  .route("/:slug")
+  .get(
+    api("getOne"),
+  )
+  .all(methodNotAllowedHandler);
+
+router
   .route("/:slug/attend")
   .post(
     validate.body(attendTalkSchema),
