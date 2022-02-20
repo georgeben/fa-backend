@@ -6,6 +6,7 @@ import morgan from "morgan";
 import errorHandler from "interfaces/http/middleware/errorHandler";
 import v1Routes from "./v1";
 import error404 from "../middleware/notFoundHandler";
+import InvalidPayloadError from "../errors/InvalidPayloadError";
 
 /**
  * Configures express middlewares
@@ -17,11 +18,16 @@ export default ({ config, containerMiddleware }) => {
   router.use(morgan(NODE_ENV === "production" ? "combined" : "dev"));
 
   const bodyLimit = config.get("app.bodyLimit");
-  router.use(
+  router.use((req, res, next) => {
     bodyParser.json({
       limit: bodyLimit,
-    }),
-  );
+    })(req, res, (err) => {
+      if (err) {
+        return next(new InvalidPayloadError("Invalid JSON payload passed"));
+      }
+      return next();
+    });
+  });
   router.use(bodyParser.urlencoded({ extended: false, limit: bodyLimit }));
 
   const allowedOrigins = config.get("app.allowedOrigins");
