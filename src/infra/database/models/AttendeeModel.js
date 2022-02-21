@@ -9,6 +9,7 @@ const attendeeSchema = new mongoose.Schema({
     unique: true,
   },
   talks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Talk" }],
+  photoUrl: String,
 }, {
   timestamps: true,
   toObject: {
