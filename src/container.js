@@ -21,6 +21,7 @@ container.register({
   containerMiddleware: asValue(scopePerRequest(container)),
   routes: asFunction(routes),
   httpServer: asClass(httpServer),
+  currentUser: asValue(null),
 });
 
 container.loadModules(

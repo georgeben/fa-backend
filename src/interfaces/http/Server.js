@@ -8,7 +8,7 @@ import { Server } from "socket.io";
  */
 class HttpServer {
   constructor({
-    config, routes, logger, handleSocketConnected,
+    config, routes, logger, handleSocketConnected, authenticateSocket,
   }) {
     const app = express();
     app.disable("x-powered-by");
@@ -24,14 +24,7 @@ class HttpServer {
     this.config = config;
     this.logger = logger;
 
-    this.io.use((socket, next) => {
-      const { token } = socket.handshake.auth;
-      console.log("Token", token);
-      /* if (token !== "secret") {
-        next(new Error("Get lost"))
-      } */
-      next();
-    });
+    this.io.use(authenticateSocket);
 
     this.io.on("connection", handleSocketConnected);
   }

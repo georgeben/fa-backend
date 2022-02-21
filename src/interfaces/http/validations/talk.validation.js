@@ -12,15 +12,10 @@ export const submitTalkSchema = Joi.object({
   bio: requiredString,
   socials: Joi.object({
     linkedin: Joi.string()
-      .uri({ scheme: ["https"] }),
+      .uri({ scheme: ["https"] }).allow(""),
     twitter: Joi.string()
-      .uri({ scheme: ["https"] }),
+      .uri({ scheme: ["https"] }).allow(""),
   }),
   photoUrl: Joi.string()
-    .uri({ scheme: ["https"] }),
-});
-
-export const attendTalkSchema = Joi.object({
-  name: requiredString,
-  email: email.required(),
+    .uri({ scheme: ["https"] }).allow(""),
 });

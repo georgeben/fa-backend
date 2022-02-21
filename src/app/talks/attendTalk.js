@@ -1,7 +1,7 @@
 import ResourceNotFoundError from "interfaces/http/errors/ResourceNotFoundError";
 
-function attendTalk({ talkRepository, attendeeRepository }) {
-  return async (talkSlug, payload) => {
+function attendTalk({ talkRepository, attendeeRepository, currentUser }) {
+  return async (talkSlug) => {
     const talk = await talkRepository.find({ slug: talkSlug }, {}, { lean: true });
     if (!talk) {
       throw new ResourceNotFoundError("Talk was not found");
@@ -9,9 +9,9 @@ function attendTalk({ talkRepository, attendeeRepository }) {
 
     const attendee = await attendeeRepository
       .findOneAndUpdate({
-        email: payload.email,
+        _id: currentUser._id,
       },
-      { ...payload, $addToSet: { talks: talk._id } },
+      { $addToSet: { talks: talk._id } },
       { new: true, upsert: true });
     return attendee;
   };

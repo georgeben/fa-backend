@@ -3,12 +3,15 @@ import { pick } from "lodash";
 import BaseController from "./BaseController";
 
 class TalkController extends BaseController {
-  constructor({ submitTalk, getTalks, attendTalk, getTalkBySlug }) {
+  constructor({
+    submitTalk, getTalks, attendTalk, getTalkBySlug, getMessages,
+  }) {
     super();
     this.submitTalk = submitTalk;
     this.getTalks = getTalks;
     this.attendTalk = attendTalk;
     this.getTalkBySlug = getTalkBySlug;
+    this.getMessages = getMessages;
   }
 
   async submit(req, res) {
@@ -42,10 +45,15 @@ class TalkController extends BaseController {
   }
 
   async attend(req, res) {
-    const payload = pick(req.body, ["name", "email"]);
     const { slug } = req.params;
-    const response = await this.attendTalk(slug, payload);
-    return this.responseBuilder.onSuccess(res, "You've successfully joined talk", response);
+    const attendee = await this.attendTalk(slug);
+    return this.responseBuilder.onSuccess(res, "You've successfully joined talk", attendee);
+  }
+
+  async listChats(req, res) {
+    const { id } = req.params;
+    const messages = await this.getMessages(id);
+    return this.responseBuilder.onSuccess(res, "Listed all messages", messages);
   }
 }
 

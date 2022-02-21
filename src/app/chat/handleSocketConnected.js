@@ -1,14 +1,19 @@
-function handleSocketConnected() {
+import logger from "infra/logger";
+
+function handleSocketConnected({ saveMessage }) {
   return (socket) => {
     socket.send("Welcome");
     socket.on("disconnect", () => {
-      console.log("user disconnected");
+      logger.info("User disconnected");
     });
-    console.log("a user connected");
 
-    socket.on("chat_message", (data) => {
-      console.log("New message", data);
-      socket.to(data.room).emit("chat_message", data.msg);
+    if (socket.user) {
+      socket.user.talks.forEach((talk) => socket.join(talk.toString()));
+    }
+
+    socket.on("chat_message", async (data) => {
+      socket.to(data.room).emit("chat_message", { from: socket.user, text: data.msg });
+      await saveMessage({ from: socket.user._id, text: data.msg, roomId: data.room });
     });
   };
 }

@@ -49,6 +49,13 @@ const config = {
     env: "ALLOWED_ORIGINS",
     sensitive: false,
   },
+  jwtSecret: {
+    doc: "Secret key for signing JWT",
+    format: "*",
+    default: null,
+    env: "JWT_SECRET",
+    sensitive: true,
+  },
 };
 
 exports.app = config;
