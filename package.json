@@ -4,8 +4,10 @@
   "description": "API for Future Africa Conference",
   "main": "src/index.js",
   "scripts": {
+    "build": "babel src --delete-dir-on-start --copy-files -d dist",
     "prestart": "npm run build",
     "start:dev": "nodemon \"src/index.js\"",
+    "start": "NODE_ENV=production pm2-runtime start ecosystem.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "node_modules/.bin/eslint \"./src/**/*.js\"",
     "docs:api": "echo 'Building REST Docs...' && apidoc -i src/interfaces/http/routes/ -o docs/apidocs"
